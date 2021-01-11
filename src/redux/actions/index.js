@@ -25,8 +25,9 @@ export function getSelectedPlant(){
         type:"GET_SELECTED_PLANT"
     }
 }
-export function updateYourPlantData(updateData){
+export function updateYourPlantData(updateData,plantID){
     return{
+        plantID:plantID,
         data:updateData,
         type:"UPDATE_YOUR_PLANT_DATA"
     }

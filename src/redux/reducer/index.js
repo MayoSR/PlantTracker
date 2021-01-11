@@ -261,13 +261,18 @@ export default function appReducer(state = initialState, action) {
         case "CLOSE_PLANT_DATA":
             return { ...state, selectedPlant: null, plantBoxOpen: 1, plantView: 0 }
         case "UPDATE_YOUR_PLANT_DATA":
-            let yourPlantsTemp = state.yourPlants
-            Object.keys(action.data).forEach(ele => {
-                action.data[ele].forEach(task => {
-                    yourPlantsTemp[ele].plantTaskList[task].taskCompletedAt = formatDate(new Date())
-                })
+
+            
+            let plantTaskListWithID = state.yourPlants[action.plantID].plantTaskList
+            
+            Object.keys(action.data).forEach((task)=>{
+                if(action.data[task]){
+                    plantTaskListWithID = {...plantTaskListWithID,[task]:{...plantTaskListWithID[task],taskCompletedAt:formatDate(new Date())}}
+                }
             })
-            return {...state,yourPlants:{...state.yourPlants,...yourPlantsTemp}}
+            
+            console.log({...state,yourPlants:{...state.yourPlants,[action.plantID]:{...plantTaskListWithID}}})
+            return {...state,yourPlants:{...state.yourPlants,[action.plantID]:{...state.yourPlants[action.plantID],plantTaskList : {...state.yourPlants[action.plantID].plantTaskList,...plantTaskListWithID}}}}
         default:
             return state
     }
